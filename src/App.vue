@@ -1,30 +1,46 @@
 <template>
-  <div id="nav">
+  <div class="h-screen w-full flex relative">
+    <div class="flex items-center justify-center w-full">
+      <div class="flex flex-col w-1/4">
+        <h1 class="header">Bet Holder</h1>
+        <input type="text" @keypress.enter="validate" v-model="name" class="input-black my-10" placeholder="Enter Your Name">
+        <span v-if="error" class="text-red-500"> Please insert your name first </span>
+        <div class="flex justify-center">
+          <button-black @click="validate" type="submit" class="w-2/4">
+            <span class="animate-pulse-upgrade">
+            Jump in 
+            <i class="fas fa-angle-double-right ml-3 middle" />
+            </span> 
+          </button-black>
+        </div>
+      </div>
+    </div>
+    <div class="absolute left-10 bottom-10">
+      <p>This version is dummy </p>
+      <p>if you fill any name same as in database </p>
+      <p>you will have information of that name</p>
+    </div>
+  </div>
+  <!-- <div id="nav">
     <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link>
-  </div>
-  <router-view/>
+  </div> -->
 </template>
-
+<script>
+export default {
+  data() {
+    return {
+      name: '',
+      error: false,
+    }
+  },
+  methods: {
+    validate(){
+      if(!this.name) this.error = true;
+      else this.error = false;
+    } 
+  }
+}
+</script>
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
 </style>
