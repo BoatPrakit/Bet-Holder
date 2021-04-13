@@ -3,10 +3,11 @@
     <div class="flex items-center justify-center w-full">
       <div class="flex flex-col w-1/4">
         <h1 class="header">Bet Holder</h1>
-        <input type="text" @keypress.enter="validate" v-model="name" class="input-black my-10" placeholder="Enter Your Name">
+        <input type="text" @keypress.enter="createHostUserName" v-model="name" class="input-black" placeholder="Enter Your Name">
         <span v-if="error" class="text-red-500"> Please insert your name first </span>
+        <span v-if="isDeplicated" class="text-red-500"> This user already exist </span>
         <div class="flex justify-center">
-          <button-black @click="validate" type="submit" class="w-2/4">
+          <button-black @click="createHostUserName" type="submit" class="w-2/4 mt-10">
             <span class="animate-pulse-upgrade">
             Jump in 
             <i class="fas fa-angle-double-right ml-3 middle" />
@@ -27,18 +28,37 @@
   </div> -->
 </template>
 <script>
+import axios from "./axios-instance/backendInstance"
 export default {
   data() {
     return {
       name: '',
       error: false,
+      isDeplicated: false,
     }
   },
   methods: {
     validate(){
       if(!this.name) this.error = true;
-      else this.error = false;
-    } 
+      else {
+        this.error = false;
+      }
+    },
+    async createHostUserName(){
+      this.validate();
+      const res = await axios.get(`/hostusername?name=${this.name}`);
+
+      if(res === null || res.data.length === 0) this.isDeplicated = false;
+      else if(res.data.length > 0) {
+        this.isDeplicated = true; 
+      }
+
+      if(!this.error && !this.isDeplicated){
+        await axios.post('/hostusername',{
+          name: this.name
+        }) 
+      }
+    },
   }
 }
 </script>
