@@ -24,5 +24,18 @@
       "name": "papa",
       "id": 6
     }
+  ],
+  "rooms": [
+    {
+      "owner": "boat",
+      "description": "test",
+      "nameList": [
+        {
+          "name": "boat",
+          "money": 0
+        }
+      ],
+      "id": 1
+    }
   ]
 }

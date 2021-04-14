@@ -3,6 +3,13 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      height: {
+        nav: "10vh",
+        content: "90vh",
+      },
+      backgroundColor: {
+        "gray-bg": "#F6F6F6",
+      },
       keyframes: {
         "pulse-upgrade": {
           "0%, 100%": {

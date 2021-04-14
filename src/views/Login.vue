@@ -54,7 +54,7 @@ export default {
             name: this.name
           });
         }
-        this.$router.push('Home')
+        this.$router.push({name: 'Home', params: { 'hostusername': this.name }})
       }
     },
   }
