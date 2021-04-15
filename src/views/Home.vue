@@ -7,11 +7,11 @@
             <div class="flex justify-center w-full">
                 <card class="w-3/6">
                     <div class="flex justify-between">
-                        <h2 class="text-xl font-extrabold">Your Room:</h2>
+                        <h2 class="text-2xl font-extrabold">Your Room:</h2>
                         <button @click="openOrClosePopUp" class="bg-green-500 text-white px-2"> + </button>
                     </div>
                     <div v-for="room in totalRoom" class="flex flex-col" :key="room.id" >
-                        <Room :description="room.description" :numofperson="room.nameList.length" />
+                        <Room @deleteroom="deleteRoom" :id="room.id" :description="room.description" :numofperson="room.nameList.length" />
                     </div>
                 </card>
             </div>
@@ -43,7 +43,7 @@ export default {
     methods: {
         openOrClosePopUp(){
             this.isShowPopUp = !this.isShowPopUp;
-            if(this.isShowPopUp) this.pointerClass = 'pointer-events-none'
+            if(this.isShowPopUp) this.pointerClass = 'pointer-events-none bg-gray-200 opacity-80'
             else this.pointerClass = ''
         },
         async insertRoom({ description }){
@@ -55,7 +55,11 @@ export default {
                ]
             }
             const res = await axios.post('/rooms', data)
-            this.rooms.push(...data, res.data.id)
+            this.rooms.push({...data, id: res.data.id})
+        },
+        async deleteRoom({ roomId }){
+            await axios.delete(`/rooms/${roomId}`);
+            this.rooms = this.rooms.filter( room => room.id !== roomId );
         }
     },
     async mounted() {

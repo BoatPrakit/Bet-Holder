@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-400 flex opacity-80 justify-center items-center h-screen absolute z-50 w-full pointer-events-auto">
+  <div class="bg-gray-400 flex bg-opacity-80 justify-center items-center h-screen absolute z-50 w-full pointer-events-auto">
     <div class="bg-white shadow-lg p-10 flex flex-col w-3/12">
         <div class="flex justify-end">
           <i @click="closePopUp" class="fas fa-times cursor-pointer"></i>
