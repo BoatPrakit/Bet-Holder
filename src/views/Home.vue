@@ -1,17 +1,17 @@
 <template>
     <div :class="pointerClass" class="relative">
-        <CreatePopup v-if="isShowPopUp" @createroom="insertRoom" @closepopup="openOrClosePopUp"></CreatePopup>
+        <PopUp v-if="isShowPopUp" :option="optionPopUp" @create="insertRoom" @closepopup="openOrClosePopUp"></PopUp>
         <Navbar :hostusername="hostusername"></Navbar>
-        <div class="bg-gray-bg h-content p-8 z-0">
+        <div class="bg-gray-bg min-h-content p-8 z-0">
             <h1 class="header">Bet Holder</h1>
             <div class="flex justify-center w-full">
                 <card class="w-3/6">
                     <div class="flex justify-between">
                         <h2 class="text-2xl font-extrabold">Your Room:</h2>
-                        <button @click="openOrClosePopUp" class="bg-green-500 text-white px-2"> + </button>
+                        <button @click="openOrClosePopUp" class="bg-green-500 text-white px-3"> + </button>
                     </div>
                     <div v-for="room in totalRoom" class="flex flex-col" :key="room.id" >
-                        <Room @deleteroom="deleteRoom" :id="room.id" :description="room.description" :numofperson="room.nameList.length" />
+                        <Room @deleteroom="deleteRoom" :id="room.id" :room="room" />
                     </div>
                 </card>
             </div>
@@ -21,8 +21,8 @@
 
 <script>
 import Navbar from "../components/util/Navbar.vue"
-import CreatePopup from "../components/util/CreatePopup"
-import Room from "../components/util/Room"
+import PopUp from "../components/util/PopUp.vue"
+import Room from "../components/util/Room.vue"
 import axios from "../axios-instance/backendInstance"
 
 export default {
@@ -30,14 +30,20 @@ export default {
     props: ['hostusername'],
     components: {
         Navbar,
-        CreatePopup,
+        PopUp,
         Room
     },
     data(){
         return {
             isShowPopUp: false,
             pointerClass: '',
-            rooms: []
+            rooms: [],
+            optionPopUp: {
+                topic: "Create Room:",
+                placeholder: "Description",
+                invalidValueError: "Please insert description",
+                deplicatedError: "This room already already exists. Please change your description",
+            }
         }
     },
     methods: {
@@ -46,10 +52,10 @@ export default {
             if(this.isShowPopUp) this.pointerClass = 'pointer-events-none bg-gray-200 opacity-80'
             else this.pointerClass = ''
         },
-        async insertRoom({ description }){
+        async insertRoom({ inputValue }){
             const data = {
                owner: this.hostusername,
-               description,
+               description: inputValue,
                nameList: [
                    { name: this.hostusername, money: 0}
                ]
@@ -65,7 +71,10 @@ export default {
     async mounted() {
         if(!this.hostusername) this.$router.push('/');
         const res = await axios.get(`/rooms?owner=${this.hostusername}`);
-        if(res.status === 200) this.rooms = res.data;
+        if(res.status === 200) {
+            this.rooms = res.data;
+            this.optionPopUp.data = this.rooms.map( element => element.description )
+        }
     },
     computed: {
         totalRoom(){

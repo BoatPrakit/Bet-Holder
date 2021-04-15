@@ -5,6 +5,8 @@ module.exports = {
     extend: {
       height: {
         nav: "10vh",
+      },
+      minHeight: {
         content: "90vh",
       },
       backgroundColor: {
