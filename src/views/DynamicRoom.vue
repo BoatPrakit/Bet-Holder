@@ -1,6 +1,6 @@
 <template>
     <div :class="pointerClass" class="relative">
-        <PopUp v-if="isShowPopUp" :option="optionPopUp" @create="updateName" @closepopup="openOrClosePopUp"></PopUp>
+        <PopUp v-if="isShowPopUp" :option="optionPopUp" @create="createName" @closepopup="openOrClosePopUp"></PopUp>
         <Navbar :hostusername="roomInformation.owner" />
         <div class="bg-gray-bg min-h-content flex w-full">
             <div class="w-3/4 p-16">
@@ -12,8 +12,7 @@
                     <button @click="openOrClosePopUp" class="bg-green-500 text-white px-3"> + </button>
                 </div>
                 <div v-for="user in nameList" class="flex flex-col" :key="user.name">
-                    <NameInRoom v-if="user.name === roomInformation.owner" :name="user.name" :ishost="true" />
-                    <NameInRoom v-else :name="user.name" :ishost="false" />
+                    <NameInRoom @deletename="deleteName" :name="user.name" :host="roomInformation.owner" />
                 </div>
             </card>
         </div>
@@ -52,7 +51,7 @@ export default {
             if(this.isShowPopUp) this.pointerClass = 'pointer-events-none'
             else this.pointerClass = ''
         },
-        async updateName({ inputValue }){
+        async createName({ inputValue }){
             await axios.put(`/rooms/${this.$route.params.id}`, {
                 ...this.roomInformation,
                 nameList: [
@@ -65,8 +64,16 @@ export default {
         async prepareRoomInformation(){
             const res = await axios.get(`/rooms/${this.$route.params.id}`);
             this.roomInformation = res.data;
-            this.optionPopUp.data = this.roomInformation.nameList.map(data => data.name)
-        }
+            this.optionPopUp.data = this.roomInformation.nameList.map(user => user.name)
+        },
+        async deleteName({ targetName }){
+            const nameListWithoutTarget = [...this.roomInformation.nameList].filter(user => user.name !== targetName)
+            await axios.put(`/rooms/${this.$route.params.id}`, {
+                ...this.roomInformation,
+                nameList: [...nameListWithoutTarget]
+            })
+            this.prepareRoomInformation();
+        },
     },
     async mounted(){
         this.prepareRoomInformation();
