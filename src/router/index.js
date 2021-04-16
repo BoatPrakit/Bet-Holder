@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Login from "../views/Login.vue";
 import Home from "../views/Home.vue";
+import DynamicRoom from "../views/DynamicRoom.vue";
 const routes = [
   {
     path: "/",
@@ -11,6 +12,12 @@ const routes = [
     path: "/home",
     name: "Home",
     component: Home,
+    props: true,
+  },
+  {
+    path: "/room/:id",
+    name: "Room",
+    component: DynamicRoom,
     props: true,
   },
 ];

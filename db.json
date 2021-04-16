@@ -3,19 +3,39 @@
     {
       "name": "boat",
       "id": 1
+    },
+    {
+      "name": "boa",
+      "id": 2
     }
   ],
   "rooms": [
     {
       "owner": "boat",
-      "description": "d",
+      "description": "f",
       "nameList": [
         {
           "name": "boat",
           "money": 0
+        },
+        {
+          "name": "f",
+          "money": 0
+        },
+        {
+          "name": "dddd",
+          "money": 0
+        },
+        {
+          "name": "ddddd",
+          "money": 0
+        },
+        {
+          "name": "fwf",
+          "money": 0
         }
       ],
-      "id": 2
+      "id": 1
     }
   ]
 }
