@@ -16,10 +16,10 @@
       "nameList": [
         {
           "name": "boat",
-          "money": 0
+          "money": 100
         },
         {
-          "name": "f",
+          "name": "ddd",
           "money": 0
         }
       ],

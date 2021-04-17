@@ -5,6 +5,13 @@
         <div class="bg-gray-bg min-h-content flex w-full">
             <div class="w-3/4 p-16">
                 <h1 class="text-3xl font-extrabold">Description: {{ roomInformation.description }}</h1>
+                <card class="mt-10 flex">
+                    <user-model v-for="user in nameList" 
+                    :moneyforinit="user.money" 
+                    :key="user.id" 
+                    :name="user.name" 
+                    @updatemoney="updateMoney"/>
+                </card>
             </div>
             <card class="w-1/4 p-16">
                 <div class="flex w-full justify-between mb-10">
@@ -23,6 +30,7 @@
 import Navbar from '../components/util/Navbar'
 import NameInRoom from '../components/util/NameInRoom'
 import PopUp from "../components/util/PopUp"
+import UserModel from '../components/util/UserModel'
 import axios from "../axios-instance/backendInstance"
 
 export default {
@@ -30,7 +38,8 @@ export default {
     components: {
         Navbar,
         NameInRoom,
-        PopUp
+        PopUp,
+        UserModel
     },
     data(){
         return {
@@ -74,6 +83,16 @@ export default {
             })
             this.prepareRoomInformation();
         },
+        async updateMoney({ money,targetName }){
+            const nameListAfterChangeMoney = [...this.roomInformation.nameList]
+                .map(user => user.name === targetName ? 
+                            { ...user, money: money } :
+                            user )
+            await axios.put(`/rooms/${this.$route.params.id}`, {
+                ...this.roomInformation,
+                nameList: [...nameListAfterChangeMoney]
+            })
+        }
     },
     async mounted(){
         this.prepareRoomInformation();
